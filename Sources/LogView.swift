@@ -35,6 +35,8 @@ public struct LogView: View {
     return grouped
   }
 
+  public init() {}
+  
   public var body: some View {
     Group {
       if model.isLoading && model.logsIsEmpty {
