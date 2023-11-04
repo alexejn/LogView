@@ -11,17 +11,11 @@ extension LogView {
   /// Predicate for feathing entries from store
   public static var predicate: NSPredicate?
 
-
   public typealias FilterEntries = (OSLogEntryLog) -> Bool
 
   /// Additional filter after fetcnig from store. Not all condition can be used when filter with predicate.
   /// This additional opportunity to get wished logs
-  public static var filterEntries: FilterEntries = {
-    ($0.category == "" && $0.sender == "FBS") || // основной таргет приложения
-    [Bundle.main.bundleIdentifier!,
-     "com.appsflyer.lib",
-     "com.apple.runtime-issues"].contains($0.subsystem) // разрешенные подсистемы
-  }
+  public static var filterEntries: FilterEntries = { _ in true }
 }
 
 public extension NSPredicate {
