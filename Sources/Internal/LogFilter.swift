@@ -1,14 +1,11 @@
 //
-//  LogFilter.swift
-//  fbsDebugView
-//
-//  Created by Alexey Nenastev on 27.10.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import Foundation
 import OSLog
 
+@available(iOS 15.0, *)
 struct LogFilter: Codable {
   struct Tags: Codable {
     var levels = Set<OSLogEntryLog.Level.RawValue>()
@@ -96,12 +93,14 @@ struct LogFilter: Codable {
   }
 }
 
+@available(iOS 15.0, *)
 extension OSLogEntryLog.Level {
   static var all: [OSLogEntryLog.Level] {
     [.debug, .info, .notice, .error, .fault]
   }
 }
 
+@available(iOS 15.0, *)
 extension Set where Element == OSLogEntryLog.Level.RawValue {
   static var all: Set<Element> {
     Set(OSLogEntryLog.Level.all.map { $0.rawValue })

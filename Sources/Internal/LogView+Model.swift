@@ -1,10 +1,6 @@
 //
-//  LogsViewModel.swift
-//  fbsDebugView
-//
-//  Created by Alexey Nenastev on 27.10.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import Foundation
 import SwiftUI
@@ -14,6 +10,7 @@ import os
 
 private let logger = Logger(subsystem: "com.logview", category: "logger")
 
+@available(iOS 15.0, *)
 final class LogViewModel: ObservableObject {
 
   private var logs: [OSLogEntryLog] = [] {
@@ -104,6 +101,7 @@ final class LogViewModel: ObservableObject {
   }
 }
 
+@available(iOS 15.0, *)
 extension Date {
   var logTimeString: String {
     formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().second().secondFraction(.fractional(3)))
@@ -124,6 +122,7 @@ extension Sequence {
   }
 }
 
+@available(iOS 15.0, *)
 extension OSLogEntryLog.Level {
   var description: String {
     switch self {

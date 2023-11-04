@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "LogView",
     platforms: [
-            .iOS(.v15)
+            .iOS(.v14)
         ],
     products: [
         .library(name: "LogView", targets: ["LogView"])

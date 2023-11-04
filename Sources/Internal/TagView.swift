@@ -1,10 +1,6 @@
 //
-//  TagView.swift
-//  fbsDebugView
-//
-//  Created by Alexey Nenastev on 2.11.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import SwiftUI
 import OSLog
@@ -102,6 +98,7 @@ struct TagLabel: View {
   }
 }
 
+@available(iOS 15.0, *)
 struct TagButton<T: Hashable>: View {
   var tagCollection: WritableKeyPath<LogFilter.Tags, Set<T>>
   var statistic: KeyPath<LogFilter.TagsStatistic, [T: Int]>
@@ -140,6 +137,7 @@ struct TagButton<T: Hashable>: View {
   }
 }
 
+@available(iOS 15.0, *)
 extension TagButton where T == String {
   static func subsystem(tag: T) -> Self {
     TagButton(tagCollection: \.sybsytems,
@@ -160,6 +158,7 @@ extension TagButton where T == String {
   }
 }
 
+@available(iOS 15.0, *)
 extension TagButton where T == OSLogEntryLog.Level.RawValue {
   static func level(tag: T) -> Self {
     TagButton(tagCollection: \.levels,
@@ -180,6 +179,7 @@ extension EnvironmentValues {
   }
 }
 
+@available(iOS 15.0, *)
 struct TagView_Previews: PreviewProvider {
 
   struct ButtonPreview: View {

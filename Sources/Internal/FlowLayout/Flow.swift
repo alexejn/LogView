@@ -1,3 +1,7 @@
+//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
+
 import SwiftUI
 
 struct Flow<Content>: View

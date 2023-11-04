@@ -1,17 +1,16 @@
 //
-//  File.swift
-//  
-//
-//  Created by Alexey Nenastev on 4.11.23..
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import Foundation
 import OSLog
 
+@available(iOS 15.0, *)
 extension LogView {
 
   /// Predicate for feathing entries from store
   public static var predicate: NSPredicate?
+
 
   public typealias FilterEntries = (OSLogEntryLog) -> Bool
 

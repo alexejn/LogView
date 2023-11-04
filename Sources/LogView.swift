@@ -1,10 +1,6 @@
 //
-//  LogsView.swift
-//  FBS
-//
-//  Created by Alexey Nenastev on 27.10.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import Foundation
 import SwiftUI
@@ -19,6 +15,7 @@ private extension View {
   }
 }
 
+@available(iOS 15.0, *)
 public struct LogView: View {
 
   @StateObject private var model = LogViewModel()
@@ -101,12 +98,14 @@ fileprivate extension View {
   }
 }
 
+@available(iOS 15.0, *)
 extension OSLogEntryLog: Identifiable {
   public var id: String {
     self.description
   }
 }
 
+@available(iOS 15.0, *)
 struct LogsView_Previews: PreviewProvider {
   static var previews: some View {
     NavigationView {

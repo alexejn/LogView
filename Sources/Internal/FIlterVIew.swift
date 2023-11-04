@@ -1,14 +1,12 @@
 //
-//  FIlterVIew.swift
-//  fbsDebugView
-//
-//  Created by Alexey Nenastev on 27.10.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
+
 import Foundation
 import SwiftUI
 import OSLog
 
+@available(iOS 15.0, *)
 struct FilterView: View {
   @EnvironmentObject var model: LogViewModel
 
@@ -66,6 +64,7 @@ struct FilterView: View {
   }
 }
 
+@available(iOS 15.0, *)
 struct FilterView_Previews: PreviewProvider {
   struct Preview: View {
     @StateObject var model = LogViewModel()

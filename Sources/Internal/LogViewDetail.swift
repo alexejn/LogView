@@ -1,16 +1,13 @@
 //
-//  LogViewDetail.swift
-//  fbsDebugView
-//
-//  Created by Alexey Nenastev on 2.11.23..
-//  Copyright © 2023 Data Driven Lab. All rights reserved.
-//
+// Created by Alexey Nenastev on 27.10.23.
+// Copyright © 2023 Alexey Nenastyev (github.com/alexejn). All Rights Reserved.
 
 import Foundation
 import SwiftUI
 import OSLog
 import os
 
+@available(iOS 15.0, *)
 struct TagButtonActionPicker: View {
   @Binding var tagButtonAction: TagButtonAction
   var body: some View {
@@ -47,6 +44,7 @@ struct TagButtonActionPicker: View {
   }
 }
 
+@available(iOS 15.0, *)
 struct LogViewDetail: View {
 
   let logMessage: String
@@ -107,6 +105,7 @@ struct LogViewDetail: View {
   }
 }
 
+@available(iOS 15.0, *)
 extension LogViewDetail {
   init(log: OSLogEntryLog) {
     self.logMessage = log.composedMessage
@@ -118,6 +117,7 @@ extension LogViewDetail {
   }
 }
 
+@available(iOS 15.0, *)
 struct LogViewDetail_Previews: PreviewProvider {
   static var previews: some View {
     Text("aa")
