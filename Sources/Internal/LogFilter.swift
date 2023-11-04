@@ -6,8 +6,8 @@ import Foundation
 import OSLog
 
 @available(iOS 15.0, *)
-struct LogFilter: Codable {
-  struct Tags: Codable {
+struct LogFilter: Codable, Equatable {
+  struct Tags: Codable, Equatable {
     var levels = Set<OSLogEntryLog.Level.RawValue>()
     var categories = Set<String>()
     var sybsytems = Set<String>()

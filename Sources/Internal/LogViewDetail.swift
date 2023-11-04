@@ -60,7 +60,7 @@ struct LogViewDetail: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      HStack(spacing: 15) {
+      HStack(alignment: .center ,spacing: 15) {
         TagButtonActionPicker(tagButtonAction: $tagButtonAction)
         Divider()
           .frame(height: 20)
@@ -79,19 +79,31 @@ struct LogViewDetail: View {
         if #available(iOS 16.0, *) {
           ShareLink(item: shareItem) {
             Image(systemName: "square.and.arrow.up")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 20)
           }
         }
       }
       .padding(.horizontal)
 
       VFlow(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
-        TagButton.subsystem(tag: subsystem)
-        TagButton.category(tag: category)
-        TagButton.sender(tag: sender)
-        TagButton.level(tag: level)
+        titled("Category", systemName: "square.grid.3x3") {
+          TagButton.category(tag: category)
+        }
+        titled("Subsystem", systemName: "gearshape.2") {
+          TagButton.subsystem(tag: subsystem)
+        }
+        titled("Library", systemName: "building.columns") {
+          TagButton.sender(tag: sender)
+        }
+        titled("Level", systemName: "stethoscope") {
+          TagButton.level(tag: level)
+        }
       }
       .padding(.horizontal)
       .environment(\.tagButtonAction, tagButtonAction)
+
       Divider()
 
       ScrollView {
@@ -102,6 +114,16 @@ struct LogViewDetail: View {
       }
     }
     .padding(.top)
+  }
+
+  func titled(_ title: String, systemName: String,  @ViewBuilder _ builder: () -> some View) -> some View {
+    VStack(alignment: .leading, spacing: 4) {
+     (Text(Image(systemName: systemName)) + Text(" " + title))
+        .font(.footnote)
+        .opacity(0.5)
+        .padding(.leading, 4)
+      builder()
+    }
   }
 }
 

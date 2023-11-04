@@ -41,6 +41,7 @@ struct TagLabel: View {
   var tagLabel: String
   var count: Int = 0
   var state: TagState
+  var highlight: Color = Color.clear
   @State private var textSize: CGSize = .zero
 
   private var color: Color {
@@ -60,23 +61,28 @@ struct TagLabel: View {
 
   var body: some View {
     HStack(spacing: 4) {
-        if state == .notEqual {
-          Text("≠")
-          Divider()
-            .frame(height: 12)
-        }
-        Text(tagLabel)
-
-        if state != .notEqual && count > 0 {
-          Divider()
-            .frame(height: 12)
-          Text("\(count)")
-            .fontWeight(.light)
-        }
+      if state == .notEqual {
+        Text("≠")
+        Divider()
+          .frame(height: 12)
       }
+      Text(tagLabel)
+
+      if state != .notEqual && count > 0 {
+        Divider()
+          .frame(height: 12)
+        Text("\(count)")
+          .fontWeight(.light)
+          .background(
+            highlight
+              .padding(EdgeInsets(top: -10, leading: -5, bottom: -10, trailing: -20))
+          )
+      }
+    }
     .padding(.vertical, 10)
     .padding(.horizontal, horizontalPadding)
     .foregroundColor(color)
+    .cornerRadius(14)
     .overlay(
       RoundedRectangle(cornerRadius: 14)
         .stroke(color, style: StrokeStyle(lineWidth: 1, dash: dash))
@@ -104,6 +110,7 @@ struct TagButton<T: Hashable>: View {
   var statistic: KeyPath<LogFilter.TagsStatistic, [T: Int]>
   var tag: T
   var label: (T) -> String = { "\($0)" }
+  var highlight: Color = .clear
 
   private var count: Int {
     model.filterStatistic[keyPath: statistic][tag] ?? 0
@@ -130,7 +137,8 @@ struct TagButton<T: Hashable>: View {
     }, label: {
       TagLabel(tagLabel: label(tag),
                count: count,
-               state: state)
+               state: state,
+               highlight: highlight)
     })
     .animation(.easeIn, value: count)
     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: state)
@@ -161,10 +169,12 @@ extension TagButton where T == String {
 @available(iOS 15.0, *)
 extension TagButton where T == OSLogEntryLog.Level.RawValue {
   static func level(tag: T) -> Self {
-    TagButton(tagCollection: \.levels,
-              statistic: \.levels,
-              tag: tag,
-              label: { OSLogEntryLog.Level(rawValue: $0)!.description })
+    let level = OSLogEntryLog.Level(rawValue: tag)!
+    return TagButton(tagCollection: \.levels,
+                     statistic: \.levels,
+                     tag: tag,
+                     label: { _ in level.description },
+                     highlight: level.color.opacity(0.2))
   }
 }
 
@@ -205,6 +215,8 @@ struct TagView_Previews: PreviewProvider {
       TagLabel(tagLabel: "asd", count: 1, state: .none)
       TagLabel(tagLabel: "asd", count: 11, state: .none)
       TagLabel(tagLabel: "asd", count: 111, state: .none)
+
+
     }
 
     ButtonPreview()

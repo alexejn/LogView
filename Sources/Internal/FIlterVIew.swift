@@ -15,9 +15,13 @@ struct FilterView: View {
   @ViewBuilder
   private func section<T: Comparable>(_ title: String,
                                       _ tagsKp: WritableKeyPath<LogFilter.Tags, Set<T>>,
+                                      systemName: String,
                                       @ViewBuilder button: @escaping (T) -> some View) -> some View {
-    Text(title)
-      .font(.title2)
+    HStack {
+      Image(systemName: systemName)
+      Text(title)
+        .font(.title2)
+    }
     let values = LogFilter.all[keyPath: tagsKp]
     VFlow(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
       ForEach(values.sorted(), id: \.self) {
@@ -44,16 +48,16 @@ struct FilterView: View {
       Divider()
       ScrollView {
         VStack(alignment: .leading) {
-          section("Log level", \.levels) {
+          section("Log level", \.levels, systemName: "stethoscope") {
             TagButton.level(tag: $0)
           }
-          section("Subsystem", \.sybsytems) {
+          section("Subsystem", \.sybsytems, systemName: "gearshape.2") {
             TagButton.subsystem(tag: $0)
           }
-          section("Category", \.categories) {
+          section("Category", \.categories, systemName: "square.grid.3x3") {
             TagButton.category(tag: $0)
           }
-          section("Library", \.senders) {
+          section("Library", \.senders, systemName: "building.columns") {
             TagButton.sender(tag: $0)
           }
         }

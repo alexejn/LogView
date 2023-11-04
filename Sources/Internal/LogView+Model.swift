@@ -28,8 +28,16 @@ final class LogViewModel: ObservableObject {
   @Published var filtered: [OSLogEntryLog] = []
   @Published var filterStatistic = LogFilter.TagsStatistic()
   @Published var isLoading: Bool = false
+  @Published var searchText: String = ""
+
+  var filteredAndSearched: [OSLogEntryLog] {
+    filtered.filter { log in
+      searchText.isEmpty || log.composedMessage.lowercased().contains(searchText.lowercased())
+    }
+  }
 
   private var lastDate: Date?
+
   @Published var filter: LogFilter = .empty {
     didSet {
       var stat = LogFilter.TagsStatistic()
@@ -38,26 +46,14 @@ final class LogViewModel: ObservableObject {
     }
   }
 
-  public static var predicate: NSPredicate? = NSPredicate.subystemIn([Bundle.main.bundleIdentifier!,
-                                                                      "com.appsflyer.lib",
-                                                                      "com.apple.runtime-issues"])
-  public typealias FilterEntries = (OSLogEntryLog) -> Bool
-
-  public static var filterEntries: FilterEntries = {
-    ($0.category == "" && $0.sender == "FBS") || // основной таргет приложения
-    [Bundle.main.bundleIdentifier!,
-     "com.appsflyer.lib",
-     "com.apple.runtime-issues"].contains($0.subsystem) // разрешенные подсистемы
-  }
-
-  private let store = try? OSLogStore(scope: .currentProcessIdentifier)
+  private static let store = try? OSLogStore(scope: .currentProcessIdentifier)
 
   init() {
     load()
   }
 
   private func fetchLogs() {
-    guard let store = store else { return }
+    guard let store = LogViewModel.store else { return }
 
     var position: OSLogPosition?
     if let lastDate = lastDate {
@@ -67,12 +63,12 @@ final class LogViewModel: ObservableObject {
 
     do {
 
-      let entries = try store.getEntries(at: position, matching: Self.predicate)
+      let entries = try store.getEntries(at: position, matching: LogView.predicate)
 
       let filteredEntries = entries.compactMap { entry -> OSLogEntryLog? in
         guard let log = entry as? OSLogEntryLog, 
                 log.date.timeIntervalSince1970 > (lastDate?.timeIntervalSince1970 ?? 0 ),
-                Self.filterEntries(log) else { return nil }
+              LogView.filterEntries(log) else { return nil }
         return log
       }
 
@@ -98,6 +94,10 @@ final class LogViewModel: ObservableObject {
     DispatchQueue.global(qos: .userInteractive).async { [weak self] in
       self?.fetchLogs()
     }
+  }
+
+  func clear() {
+    logs = []
   }
 }
 
@@ -139,7 +139,7 @@ extension OSLogEntryLog.Level {
     switch self {
     case .debug: return .gray
     case .info: return .blue
-    case .notice: return .blue
+    case .notice: return .mint
     case .error: return .red
     case .fault: return .black
     default: return .gray

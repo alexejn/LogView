@@ -21,13 +21,12 @@ public struct LogView: View {
   @StateObject private var model = LogViewModel()
   @State private var filterPresented = false
   @State private var selected: OSLogEntryLog?
-  @AppStorage("logs.isreversed") private var isReversed: Bool = false
 
-  private func grouped(index: Int) -> Bool {
-    let entry = model.filtered[index]
+  private func grouped(index: Int, items: [OSLogEntryLog]) -> Bool {
+    let entry = items[index]
     var grouped = false
-    if index > 0 {
-      let prev = model.filtered[index-1]
+    if index > 0 && index < items.count - 1  {
+      let prev = items[index+1]
       grouped = entry.subsystem == prev.subsystem &&
       entry.sender == prev.sender &&
       entry.category == prev.category
@@ -44,11 +43,11 @@ public struct LogView: View {
       } else {
         ScrollView {
           LazyVStack(alignment: .leading) {
-            ForEach(model.filtered.indices.reversed(), id: \.self) { index in
-              LogViewItem(log: model.filtered[index],
-                           grouped: grouped(index: index),
-                           onTap: { selected = $0 })
-              .isReversed(isReversed)
+            let items = model.filteredAndSearched
+            ForEach(items.indices.reversed(), id: \.self) { index in
+              LogViewItem(log: items[index],
+                          grouped: grouped(index: index, items: items),
+                          onTap: { selected = $0 })
 
             }
           }
@@ -56,7 +55,6 @@ public struct LogView: View {
         .refreshable {
           model.load()
         }
-        .isReversed(isReversed)
       }
     }
     .sheet(item: $selected) { log in
@@ -73,16 +71,21 @@ public struct LogView: View {
         Button {
           filterPresented.toggle()
         } label: {
-          Image(systemName: "tag")
+          Image(systemName: model.filter != .empty ? "tag.fill" : "tag")
         }
       }
 
       ToolbarItem(placement: .navigationBarLeading) {
         Button {
-          isReversed.toggle()
+          model.clear()
         } label: {
-          Image(systemName: isReversed ? "platter.filled.top.and.arrow.up.iphone" : "platter.filled.bottom.and.arrow.down.iphone")
+          Image(systemName: "trash")
         }
+      }
+
+      ToolbarItem(placement: .navigationBarLeading) {
+        Text("\(model.filteredAndSearched.count)")
+          .fontWeight(.ultraLight)
       }
 
       ToolbarItem(placement: .navigationBarTrailing) {
@@ -90,6 +93,8 @@ public struct LogView: View {
       }
     }
     .environmentObject(model)
+    .searchable(text: $model.searchText, placement: .sidebar)
+    .navigationBarTitleDisplayMode(.inline)
   }
 }
 
@@ -115,3 +120,4 @@ struct LogsView_Previews: PreviewProvider {
     }
   }
 }
+

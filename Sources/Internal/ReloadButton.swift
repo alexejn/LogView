@@ -19,7 +19,6 @@ struct ReloadButton: View {
     .disabled(isLoading)
     .onAppear { animateIfNeed(isLoaging: isLoading) }
     .onChange(of: isLoading, perform: { value in
-      print("of change \(value)")
       animateIfNeed(isLoaging: value)
     })
   }
