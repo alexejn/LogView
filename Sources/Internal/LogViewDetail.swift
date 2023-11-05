@@ -108,6 +108,7 @@ struct LogViewDetail: View {
 
       ScrollView {
         Text(logMessage)
+          .textSelection(.enabled)
           .lineLimit(nil)
           .multilineTextAlignment(.leading)
           .padding(.horizontal)
