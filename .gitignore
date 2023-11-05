@@ -1,2 +1,6 @@
 .DS_Store
-.swiftpm
+/.build
+/Packages
+xcuserdata/
+.swiftpm/
+Package.resolved
